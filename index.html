@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript and React Interview Questions</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>JavaScript and React Interview Questions & Answers</h1>
+      <p class="subtitle">A simple one-page guide prepared for interview preparation.</p>
+    </header>
+
+    <div id="faqRoot" class="faq-list"></div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "1. Interview introduction",
+        answer: "You can introduce yourself by mentioning your name, your current role, your experience in frontend development, and your strengths. For example, mention that you are a React frontend developer with experience in building scalable web applications, working with Redux, REST APIs, Material UI, and modern JavaScript concepts."
+      },
+      {
+        question: "2. Tell me about your project and how it works",
+        answer: "In my current project, we developed a cloud management platform using a Micro Frontend architecture with Single-SPA. The shell application loads the micro frontend configuration, routes the user to the appropriate module, and the UI is rendered using React. We use React Router for navigation, Redux for shared state, Axios for APIs, and Material UI for the design system."
+      },
+      {
+        question: "3. What is Single SPA?",
+        answer: "Single-SPA is a framework for building Micro Frontend applications where multiple independent frontend applications can run together as one product. Each micro frontend can be developed, tested, and deployed separately, making the system more scalable and easier to maintain."
+      },
+      {
+        question: "4. What React components did you use in your project?",
+        answer: "I used reusable components like CustomButton, CustomTextField, CustomTable, CustomBreadcrumb, CustomDrawer, Header, Sidebar, GridCard, List, and MainCard. Reusable components reduce duplicate code and help keep the UI consistent across modules."
+      },
+      {
+        question: "5. What are React Hooks and where did you use them?",
+        answer: "React Hooks are built-in functions used in functional components to manage state and side effects. I used useState for form and modal state, useEffect for API calls, useMemo for computed values, useCallback for event handlers, and useRef for DOM references."
+      },
+      {
+        question: "6. What is Context API and how did you use it?",
+        answer: "Context API allows data to be shared across components without prop drilling. In the project, I used a configuration context to store global settings such as theme and application-level configuration that were needed across multiple components."
+      },
+      {
+        question: "7. What is Redux and how did you use it?",
+        answer: "Redux is a centralized state management library. In the project, it was used to store and share application data such as VM details, admin data, reports, loading states, and API results. The flow is: user action → dispatch → middleware/thunk → API call → reducer → store update → UI re-render."
+      },
+      {
+        question: "8. What is Redux Persist and why is it used?",
+        answer: "Redux Persist stores the Redux state in browser storage so selected data remains even after refresh. It helps maintain user selections such as cloud provider, region, or pod across page reloads."
+      },
+      {
+        question: "9. What is Axios and why did you use it?",
+        answer: "Axios is a promise-based HTTP client used to communicate with REST APIs. In the project, it handled GET, POST, PUT, and DELETE requests to the backend and was centralized through a shared API layer."
+      },
+      {
+        question: "10. What is REST API and did you use GraphQL or SOAP?",
+        answer: "We used REST APIs. The frontend sent requests to the backend using HTTP methods like GET, POST, PUT, and DELETE, and received JSON responses. We did not use GraphQL or SOAP in this project."
+      },
+      {
+        question: "11. What is authentication and which method did you use?",
+        answer: "Authentication verifies the identity of a user. In our project, we used Keycloak for authentication. After login, a JWT token was generated and stored in local storage. The Axios interceptor attached it to API requests."
+      },
+      {
+        question: "12. What is an Axios interceptor and why was it used?",
+        answer: "Axios interceptors allow us to handle requests and responses globally. We used them to attach JWT tokens, manage authorization headers, and handle errors such as 401 unauthorized responses in one place."
+      },
+      {
+        question: "13. What is routing and how was it handled?",
+        answer: "Routing maps URLs to components or pages. In the project, we used react-router-dom to define routes, nested routes, dynamic routes, and protected routes for different modules and user roles."
+      },
+      {
+        question: "14. What is an Error Boundary and how does it work?",
+        answer: "An Error Boundary catches runtime errors in child components and shows a fallback UI instead of crashing the whole app. It improves stability and keeps the rest of the application usable."
+      },
+      {
+        question: "15. What is lazy loading and where was it used?",
+        answer: "Lazy loading loads components only when needed, reducing the initial bundle size. In the current project, it was not fully implemented for all internal modules, but Suspense was used for loading states."
+      },
+      {
+        question: "16. What is code splitting and did you use it?",
+        answer: "Code splitting splits the JavaScript bundle into smaller chunks so that only required parts are loaded. It can be achieved using React.lazy and Suspense, which can improve initial load performance."
+      },
+      {
+        question: "17. What is Material UI and how was theme consistency maintained?",
+        answer: "Material UI is a React component library based on Google's design system. We used a central theme configuration for colors, typography, and component styles so the UI remained consistent across the application."
+      },
+      {
+        question: "18. What is internationalization?",
+        answer: "Internationalization means preparing an application to support multiple languages. We used i18next and react-i18next concepts for translation support, keeping user-facing text in language files instead of hardcoding it."
+      },
+      {
+        question: "19. What performance optimization techniques were used?",
+        answer: "We used useMemo for expensive calculations, useCallback to avoid unnecessary function recreation, pagination for large tables, and React.memo in a few components to reduce re-renders. The micro frontend shell also helped load only the required app area."
+      },
+      {
+        question: "20. What is testing and what testing was done?",
+        answer: "Testing verifies that the application works as expected. In the project, we used Jest and React Testing Library for unit testing components, mocking APIs, testing user interactions, and verifying rendering behavior."
+      },
+      {
+        question: "21. What is DevOps and what deployment process was used?",
+        answer: "DevOps automates build, test, and deployment workflows. In our project, code was pushed to feature branches, reviewed through Merge Requests, and then built through a CI/CD pipeline into Docker images for deployment."
+      },
+      {
+        question: "22. What are arrow functions and where were they used?",
+        answer: "Arrow functions provide shorter syntax and automatically inherit this from the surrounding scope. They were used for React components, event handlers, and callbacks in our project."
+      },
+      {
+        question: "23. What are template literals?",
+        answer: "Template literals use backticks and ${} to create dynamic strings. They are cleaner than string concatenation and were used in API URL construction and dynamic messages."
+      },
+      {
+        question: "24. What is destructuring assignment?",
+        answer: "Destructuring assigns values from objects or arrays into variables in a concise syntax. It was used widely for props, API responses, Redux state, and hook values."
+      },
+      {
+        question: "25. What are spread and rest operators?",
+        answer: "The spread operator copies or merges arrays and objects, while the rest operator collects remaining values. They were used for immutable state updates and passing arguments."
+      },
+      {
+        question: "26. What is optional chaining and why was it used?",
+        answer: "Optional chaining safely reads nested properties even when a value is null or undefined. It was used in API error handling to avoid runtime errors when response data was missing."
+      },
+      {
+        question: "27. What is nullish coalescing?",
+        answer: "Nullish coalescing uses ?? to provide a default value only when the left side is null or undefined. It is helpful when preserving valid values like 0 or false."
+      },
+      {
+        question: "28. What are array methods used in the project?",
+        answer: "Common array methods such as map, filter, find, reduce, sort, some, every, slice, and forEach were used for rendering lists, filtering records, and computing totals."
+      },
+      {
+        question: "29. What are Promises, async, and await?",
+        answer: "Promises represent asynchronous tasks. async makes a function return a Promise, and await pauses until the Promise resolves. They were used for API calls and backend data handling."
+      },
+      {
+        question: "30. What is try-catch and why was it used?",
+        answer: "try-catch handles runtime errors gracefully. It was used around async API calls to prevent the app from breaking when a request failed."
+      },
+      {
+        question: "31. What is a closure and why is it important?",
+        answer: "A closure is a function that remembers variables from its outer scope even after that outer function finishes. It is useful in callbacks, comparator functions, and reusable utility logic."
+      },
+      {
+        question: "32. What is the Event Loop?",
+        answer: "The Event Loop manages asynchronous execution in JavaScript. It keeps the UI responsive while waiting for tasks like API responses and timers to complete."
+      },
+      {
+        question: "33. What is debouncing and throttling?",
+        answer: "Debouncing delays repeated events until the user stops typing, while throttling limits how often a function runs over time. Both help reduce unnecessary API calls and improve performance."
+      },
+      {
+        question: "34. What are setTimeout and setInterval?",
+        answer: "setTimeout runs a function once after a delay, and setInterval repeats it at fixed intervals. They were used for auto-refresh, notifications, and periodic updates."
+      },
+      {
+        question: "35. What is event handling and where was it used?",
+        answer: "Event handling responds to user actions such as clicks, input changes, blur, focus, and form submissions. It was used in forms, buttons, search boxes, and dialogs."
+      },
+      {
+        question: "36. What are DOM elements and how were they used?",
+        answer: "DOM elements are the HTML nodes rendered in the browser. In the project, they were used for dynamic file download, favicon updates, canvas conversions, and script loading."
+      },
+      {
+        question: "37. What are ES6 modules and why were they used?",
+        answer: "ES6 modules allow code to be divided into separate files and imported/exported cleanly. They were used heavily for components, utilities, services, Redux files, and constants."
+      },
+      {
+        question: "38. What are default export and named export?",
+        answer: "Default export is used for one main value per file, while named export is used for multiple values. We used both based on the component or utility structure."
+      },
+      {
+        question: "39. What is a Higher-Order Function?",
+        answer: "A Higher-Order Function accepts another function as an argument or returns a function. Array methods and React.memo are common examples used in React applications."
+      },
+      {
+        question: "40. What is a first-class function?",
+        answer: "In JavaScript, functions are first-class values, which means they can be stored in variables, passed around, and returned from other functions. This is fundamental to React callbacks and utility logic."
+      },
+      {
+        question: "41. What is lexical scope?",
+        answer: "Lexical scope means a function can access variables based on where it is defined. It supports closures and helps React event handlers and callbacks use the correct values."
+      },
+      {
+        question: "42. What is JSON and how was it used?",
+        answer: "JSON is a lightweight data format used for exchanging information between frontend and backend. It was used for API requests, responses, and storing data in local storage."
+      },
+      {
+        question: "43. What is data fetching and how was it used?",
+        answer: "Data fetching retrieves backend data for the UI. We used Axios inside useEffect or Redux thunk to fetch VM lists, dashboard data, and other application information."
+      },
+      {
+        question: "44. What is this keyword and was it used?",
+        answer: "this refers to the current execution context of a function. In this project it was used mainly in class-based components such as ErrorBoundary and static methods, while functional components mostly used hooks instead."
+      },
+      {
+        question: "45. What are call, apply, and bind?",
+        answer: "These methods explicitly change the value of this. They were not heavily used in this React project because functional components and arrow functions handled the need naturally."
+      },
+      {
+        question: "46. What is hoisting?",
+        answer: "Hoisting moves declarations to the top of their scope during execution. We avoided relying on it by using modern JavaScript practices and declaring variables before use."
+      },
+      {
+        question: "47. What is garbage collection?",
+        answer: "Garbage collection automatically frees memory that is no longer in use. We helped it by cleaning up timers and subscriptions during component unmount."
+      },
+      {
+        question: "48. What are shallow copy and deep copy?",
+        answer: "A shallow copy duplicates only the top level of an object, while a deep copy duplicates nested objects too. In the project, shallow copies using the spread operator were usually sufficient for React state updates."
+      },
+      {
+        question: "49. What are short-circuit operators?",
+        answer: "Short-circuit operators such as &&, ||, and ?? are used for conditional logic and fallback values. They helped simplify rendering and defaulting logic in the UI."
+      },
+      {
+        question: "50. What is the ternary operator?",
+        answer: "The ternary operator is shorthand for simple if-else logic. It was used in JSX for conditional rendering and dynamic styles."
+      }
+    ];
+
+    const root = document.getElementById("faqRoot");
+
+    questions.forEach((item, index) => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "faq-item";
+
+      const button = document.createElement("button");
+      button.className = "faq-question";
+      button.innerHTML = `<span>${item.question}</span><span class="icon">+</span>`;
+
+      const answer = document.createElement("div");
+      answer.className = "faq-answer";
+      answer.innerHTML = `<p>${item.answer}</p>`;
+
+      button.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      wrapper.appendChild(button);
+      wrapper.appendChild(answer);
+      root.appendChild(wrapper);
+    });
+  </script>
+</body>
+</html>
