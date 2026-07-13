@@ -3,17 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JavaScript and React Interview Questions</title>
+  <title>ha INterview prepartion</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>JavaScript and React Interview Questions & Answers</h1>
+      <h1>ha INterview prepartion</h1>
       <p class="subtitle">A simple one-page guide prepared for interview preparation.</p>
     </header>
 
-    <div id="faqRoot" class="faq-list"></div>
+    <div class="sections">
+      <section id="jsSection">
+        <h2>JavaScript</h2>
+        <div id="jsList" class="faq-list"></div>
+      </section>
+
+      <section id="reactSection">
+        <h2>React</h2>
+        <div id="reactList" class="faq-list"></div>
+      </section>
+    </div>
   </div>
 
   <script>
@@ -220,27 +230,37 @@
       }
     ];
 
-    const root = document.getElementById("faqRoot");
+    // simple keyword-based classification into JS vs React
+    const jsListEl = document.getElementById('jsList');
+    const reactListEl = document.getElementById('reactList');
 
-    questions.forEach((item, index) => {
-      const wrapper = document.createElement("div");
-      wrapper.className = "faq-item";
+    const reactKeywords = ['React', 'Redux', 'useState', 'useEffect', 'useMemo', 'useCallback', 'useRef', 'Context', 'Single-SPA', 'Material UI', 'i18n', 'Axios', 'Error Boundary', 'Redux Persist'];
 
-      const button = document.createElement("button");
-      button.className = "faq-question";
+    function createItemEl(item) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'faq-item';
+
+      const button = document.createElement('button');
+      button.className = 'faq-question';
+      button.type = 'button';
       button.innerHTML = `<span>${item.question}</span><span class="icon">+</span>`;
 
-      const answer = document.createElement("div");
-      answer.className = "faq-answer";
+      const answer = document.createElement('div');
+      answer.className = 'faq-answer';
       answer.innerHTML = `<p>${item.answer}</p>`;
 
-      button.addEventListener("click", () => {
-        wrapper.classList.toggle("active");
-      });
+      button.addEventListener('click', () => wrapper.classList.toggle('active'));
 
       wrapper.appendChild(button);
       wrapper.appendChild(answer);
-      root.appendChild(wrapper);
+      return wrapper;
+    }
+
+    questions.forEach(item => {
+      const text = (item.question + ' ' + item.answer).toLowerCase();
+      const isReact = reactKeywords.some(k => text.includes(k.toLowerCase()));
+      if (isReact) reactListEl.appendChild(createItemEl(item));
+      else jsListEl.appendChild(createItemEl(item));
     });
   </script>
 </body>
