@@ -3,23 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ha INterview prepartion</title>
+  <title>Interview Preparation</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>ha INterview prepartion</h1>
+      <h1>Interview Preparation</h1>
       <p class="subtitle">A simple one-page guide prepared for interview preparation.</p>
     </header>
 
+    <div class="tabs">
+      <button type="button" class="tab-btn active" data-tab="introduction">Introduction</button>
+      <button type="button" class="tab-btn" data-tab="javascript">JavaScript</button>
+      <button type="button" class="tab-btn" data-tab="react">React</button>
+      <button type="button" class="tab-btn placeholder" aria-label="More sections coming soon"></button>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
     <div class="sections">
-      <section id="jsSection">
+      <section id="introduction" class="tab-panel active">
+        <h2>Introduction</h2>
+        <div id="introList" class="faq-list"></div>
+      </section>
+
+      <section id="javascript" class="tab-panel">
         <h2>JavaScript</h2>
         <div id="jsList" class="faq-list"></div>
       </section>
 
-      <section id="reactSection">
+      <section id="react" class="tab-panel">
         <h2>React</h2>
         <div id="reactList" class="faq-list"></div>
       </section>
@@ -27,227 +41,298 @@
   </div>
 
   <script>
-    const questions = [
+    const introQuestions = [
       {
         question: "1. Interview introduction",
+        group: "Getting Started",
         answer: "You can introduce yourself by mentioning your name, your current role, your experience in frontend development, and your strengths. For example, mention that you are a React frontend developer with experience in building scalable web applications, working with Redux, REST APIs, Material UI, and modern JavaScript concepts."
       },
       {
         question: "2. Tell me about your project and how it works",
-        answer: "In my current project, we developed a cloud management platform using a Micro Frontend architecture with Single-SPA. The shell application loads the micro frontend configuration, routes the user to the appropriate module, and the UI is rendered using React. We use React Router for navigation, Redux for shared state, Axios for APIs, and Material UI for the design system."
+        group: "Getting Started",
+        answer: "In my current project, we are developing a cloud management platform using a Micro Frontend architecture with Single-SPA. When a user opens the application in the browser, the request first reaches the Single-SPA shell, which acts as the entry point for all micro frontend applications. From there, it loads the `hyperscaler-config.js` file, which is responsible for registering and configuring the individual micro frontend applications. Once the required application is identified, the control moves to the `APP.JSX` file, where the application's routing is defined.\n\nBased on the selected route, the corresponding module or service, such as Virtual Machines, Admin, or Reports, is loaded. We use React Router for navigation and Redux for centralized state management, where application data is stored and shared across components. The Routes module loads the required pages, and the common Layout component provides reusable UI elements such as the Sidebar and Header, ensuring a consistent user experience throughout the application.\n\nThe actual business screens are implemented inside the Views folder, where each feature is organized into separate modules. Whenever data is required, we use AXIOS through a common `api.js` service layer to communicate with the backend REST APIs. This centralized API layer handles all HTTP requests, making the code reusable and easier to maintain. The API responses are stored in the Redux store, and the UI is updated automatically based on the latest application state. From a technology perspective, our project uses React.js, JavaScript, Material UI v5, Redux, React Router, AXIOS, Single-SPA for the Micro Frontend architecture, Webpack, Babel, Jest for unit testing, and Git with Azure DevOps for source control and Agile-based sprint management."
+      },
+    ];
+
+    const reactQuestions = [ 
+      {
+        question: "1. What is Single SPA?",
+        group: "Architecture & State",
+        answer: "Single-SPA is an open-source framework used to build Micro Frontend applications. It allows multiple independent frontend applications to work together as a single application. Each micro frontend can be developed, tested, and deployed independently, making the application more scalable and easier to maintain.\n\nIn our project, we have a Single-SPA root application (shell). The browser first loads this root application. Inside it, we have a configuration file (for example, `hyperscaler-config.js`) where our React micro frontend application is registered. This configuration acts as the entry point for our micro frontend. Once it loads our application, the control moves to `APP.JSX`. In `APP.JSX`, we define the application's main setup, such as the Browser Router, application routes, theme customization (Material UI Theme Provider), global providers like Redux Provider, authentication, and other common configurations. Based on the route, the required module (VM, Admin, Reports, etc.) is loaded. Those modules use Redux for state management and AXIOS to communicate with the backend REST APIs."
       },
       {
-        question: "3. What is Single SPA?",
-        answer: "Single-SPA is a framework for building Micro Frontend applications where multiple independent frontend applications can run together as one product. Each micro frontend can be developed, tested, and deployed separately, making the system more scalable and easier to maintain."
+        question: "2. What are the React components you used in your project?",
+        group: "Architecture & State",
+        answer: "In our project, we follow a reusable component architecture to maintain consistency across the application. Instead of creating the same UI elements in every module, we build common reusable components such as **Custom Button, Custom Text Field, Custom Table, Custom Breadcrumb, Custom Drawer, Header, Sidebar, Grid Card, List, and Main Card**. For example, instead of creating a new button in every feature like VM, Admin, or Reports, we created a single **Custom Button** component. Whenever any module needs a button, it simply imports the reusable component and passes the required properties such as label, variant, size, color, icon, and click handler. The same approach is followed for tables, forms, drawers, and other common UI components.\n\nThis approach provides several benefits. It eliminates code duplication, ensures a consistent look and feel throughout the application, improves maintainability, and reduces development time. If there is a UI change, such as updating the button style or adding a new feature, we only need to modify the reusable component once, and the changes are automatically reflected across all modules. This makes the application more scalable and easier to maintain as new features are added."
       },
       {
-        question: "4. What React components did you use in your project?",
-        answer: "I used reusable components like CustomButton, CustomTextField, CustomTable, CustomBreadcrumb, CustomDrawer, Header, Sidebar, GridCard, List, and MainCard. Reusable components reduce duplicate code and help keep the UI consistent across modules."
+        question: "3. What is React Hooks? Where did you use them in your project?",
+        group: "Architecture & State",
+        answer: "Yes, I have used both React Hooks and Custom Hooks extensively in my project.\n\nReact Hooks are built-in functions that allow us to use state, lifecycle methods, and other React features in functional components without writing class components. In my project, I have mainly used useState, useEffect, useMemo, useCallback, and useRef.\n\nuseState is used to manage component state, such as form values, modal visibility, selected rows in a table, filters, and loading indicators.\nuseEffect is used to perform side effects like calling APIs when the component loads, fetching data when dependencies change, and cleaning up subscriptions or timers.\nuseMemo for filtering, sorting, searching we used.\nuseCallback for onDelete, onEdit, onRefresh we used.\nuseRef is used to access DOM elements directly, manage focus on input fields, store mutable values that should not trigger re-renders, and keep references to previous values.\n\nApart from React Hooks, we have also created several Custom Hooks to reuse common business logic across the application. Some of the custom hooks used in our project are:\nuseConfig – Retrieves and manages application configuration and user-specific settings.\nuseLocalStorage – Reads from and writes to browser local storage in a reusable way.\nuseScriptRef – Tracks whether a component is still mounted before updating state after an asynchronous API call, helping prevent memory leak warnings.\n\nUsing both React Hooks and Custom Hooks helped us write cleaner, reusable, and maintainable code while improving the overall performance and scalability of the application."
       },
       {
-        question: "5. What are React Hooks and where did you use them?",
-        answer: "React Hooks are built-in functions used in functional components to manage state and side effects. I used useState for form and modal state, useEffect for API calls, useMemo for computed values, useCallback for event handlers, and useRef for DOM references."
+        question: "4. What is Context API? How did you use it in your project?",
+        group: "Architecture & State",
+        answer: "Context API is a React feature that allows us to share data across multiple components without passing props from parent to child at every level. This helps avoid prop drilling and makes the code cleaner and easier to maintain.\n\nIn our project, we use a `ConfigContext.js` file to store application-level configuration. It contains common settings such as the application theme, environment-specific configuration, and other global settings that need to be accessed throughout the application."
       },
       {
-        question: "6. What is Context API and how did you use it?",
-        answer: "Context API allows data to be shared across components without prop drilling. In the project, I used a configuration context to store global settings such as theme and application-level configuration that were needed across multiple components."
+        question: "5. What is Redux? How did you use it? Explain the flow.",
+        group: "Architecture & State",
+        answer: "Redux is a state management library used to manage and share application state across multiple components in a predictable way. Instead of passing data through props, Redux stores the application state in a centralized store, making it easier to manage and update data across the application.\n\nIn our project, we use Redux Toolkit along with Redux THUNK for handling asynchronous API calls and Redux Persist to retain selected data even after the browser is refreshed. The flow in our project works like this: When a user performs an action, such as clicking the Refresh button on the Virtual Machines (VM) page, the component dispatches a Redux action. This action is intercepted by Redux THUNK, which acts as middleware. The middleware makes an asynchronous API call using AXIOS to the backend REST API. Once the backend returns the response, the action is passed to the appropriate Reducer. The reducer updates the Redux Store with the latest data. Since the component is subscribed to the Redux Store using useSelector, React automatically re-renders the component and displays the updated VM data on the screen.\n\nAdditionally, we use Redux Persist to store selected application state in the browser storage. This allows important data, such as user information or application settings, to remain available even after the user refreshes the browser, providing a better user experience.\n\nSo, the complete flow is: User Action → Dispatch Action → Redux THUNK (Middleware) → AXIOS API Call → Backend REST API → Reducer → Redux Store Update → Component Re-renders with Latest Data. In our project, Redux is mainly used for managing API data, Virtual Machine details, Admin module data, Reports, loading states, error handling, and other shared application data across different modules."
       },
       {
-        question: "7. What is Redux and how did you use it?",
-        answer: "Redux is a centralized state management library. In the project, it was used to store and share application data such as VM details, admin data, reports, loading states, and API results. The flow is: user action → dispatch → middleware/thunk → API call → reducer → store update → UI re-render."
+        question: "6. What is Redux Persist? Why is it used?",
+        group: "Architecture & State",
+        answer: "Redux Persist is a library that allows us to save the Redux store in the browser's storage (such as Local Storage or Session Storage). When the user refreshes the browser or reopens the application, the persisted data is automatically restored into the Redux store instead of being lost.\n\nIn our project, we use Redux Persist to improve the user experience by preserving important application state across page refreshes.\n\nFor example, in our Virtual Machine (VM) module, the user selects a Cloud Provider, Region, and Pod. Without Redux Persist, if the user refreshes the browser, all these selected values are cleared because the Redux store is recreated when the application reloads. The user would have to select the Cloud, Region, and Pod again. By using Redux Persist, these selected values are saved in the browser's Local Storage. When the application loads again after a refresh, Redux Persist automatically restores the saved state into the Redux store. As a result, the previously selected Cloud, Region, and Pod remain selected, providing a seamless user experience. So, the main purpose of Redux Persist is to retain important application state across browser refreshes, reduce unnecessary user input, and improve the overall user experience."
       },
       {
-        question: "8. What is Redux Persist and why is it used?",
-        answer: "Redux Persist stores the Redux state in browser storage so selected data remains even after refresh. It helps maintain user selections such as cloud provider, region, or pod across page reloads."
+        question: "7. What is Axios? Why did you use it in your project?",
+        group: "Data, Auth & Routing",
+        answer: "AXIOS is a promise-based HTTP client that we use to communicate with backend REST APIs. It supports HTTP methods such as GET, POST, PUT, DELETE, and PATCH. AXIOS also provides useful features like request and response interceptors, centralized error handling, automatic JSON transformation, and request configuration.\n\nIn our project, the backend is developed using FASTAPI, and we use AXIOS as the communication layer between our React application and the FASTAPI services.\n\nThe API flow in our project works like this: When a user performs an action, such as opening the Virtual Machine page or clicking the Refresh button, the React component does not call AXIOS directly. Instead, it calls a method from `requestService.js`, which contains the business-specific API methods. The `requestService.js` file then uses the shared AXIOS instance configured in `api.js`. The `api.js` file contains the common AXIOS configuration, such as the FASTAPI base URL, authentication token, request headers, timeout configuration, and request/response interceptors. This ensures that all API requests use the same configuration across the application."
       },
       {
-        question: "9. What is Axios and why did you use it?",
-        answer: "Axios is a promise-based HTTP client used to communicate with REST APIs. In the project, it handled GET, POST, PUT, and DELETE requests to the backend and was centralized through a shared API layer."
+        question: "8. What is REST API? Did you use GraphQL, SOAP, or RPC style?",
+        group: "Data, Auth & Routing",
+        answer: "No, we have REST API (Representational State Transfer API), an architectural style that allows the frontend and backend to communicate over HTTP. In a REST API, each resource is identified by a URL, and different HTTP methods are used to perform different operations on that resource.\n\nIn our project, the frontend is developed using React, and the backend is developed using FASTAPI. We use REST APIs to exchange data between the frontend and the backend through AXIOS. We commonly use the following HTTP methods in our project:\nGET – Retrieves data from the backend. For example, fetching the list of Virtual Machines (GET /VMS).\nPOST – Creates a new resource. For example, creating a new Virtual Machine (POST /VMS).\nPUT – Updates an existing resource. For example, updating Virtual Machine details (PUT /VMS/{id}).\nDELETE – Removes a resource. For example, deleting a Virtual Machine (DELETE /VMS/{id}).\n\nThe flow in our project is as follows: When a user performs an action, such as viewing the VM list or creating a new VM, the React component calls a method in `requestService.js`. The request is then forwarded to `api.js`, which uses the shared AXIOS instance to send the appropriate REST API request to the FASTAPI backend. FASTAPI processes the request, performs the required database operation, and returns the response. The response is then stored in the Redux Store, and the React component automatically re-renders with the updated data."
       },
       {
-        question: "10. What is REST API and did you use GraphQL or SOAP?",
-        answer: "We used REST APIs. The frontend sent requests to the backend using HTTP methods like GET, POST, PUT, and DELETE, and received JSON responses. We did not use GraphQL or SOAP in this project."
+        question: "9. What is authentication? Which authentication process have you used in your current project?",
+        group: "Data, Auth & Routing",
+        answer: "In my project, we use Keycloak for user authentication. When a user logs in, Keycloak validates the credentials and generates a JWT access token. We store this token in local storage. In our `api.js` file, we use an AXIOS interceptor to automatically attach the token to the Authorization header (Bearer Token) for every API request, so the user doesn't need to send it manually. The backend validates the token before processing the request and returns the response only if the token is valid. We also have an `accessControl.js` file that implements role-based access control (RBAC), where users like Admin and Tenant can access only the pages and actions they are authorized for. If the token expires or is invalid, the user session ends and the application redirects the user to the login page. This approach provides secure authentication, authorization, and session management across the application.\n\nAuthentication is the process of verifying the user's identity, such as validating the username and password. After successful authentication, the server or an identity provider like Keycloak generates a JWT token. This token is sent with every API request, and the backend verifies it before returning data. Once the user is authenticated, authorization determines what resources or features the user can access based on roles and permissions."
       },
       {
-        question: "11. What is authentication and which method did you use?",
-        answer: "Authentication verifies the identity of a user. In our project, we used Keycloak for authentication. After login, a JWT token was generated and stored in local storage. The Axios interceptor attached it to API requests."
+        question: "10. What is an Axios interceptor? Why did you use it in your project?",
+        group: "Data, Auth & Routing",
+        answer: "In my project, we use AXIOS interceptors in the `api.js` file. Instead of manually adding the Authorization token to every API call, we configure the interceptor once. It automatically attaches the JWT token from local storage to every outgoing request. We also use it to handle common responses, such as 401 Unauthorized. If the token is expired or invalid, it redirects the user to the login page or refreshes the token if supported. This centralizes the authentication logic, reduces duplicate code, and makes API handling easier to maintain.\n\nAn AXIOS interceptor is a feature provided by AXIOS that allows us to intercept HTTP requests and responses before they are sent or received. Request interceptors are commonly used to add authentication tokens, headers, or log requests, while response interceptors are used to handle errors like 401 Unauthorized, refresh expired tokens, or process responses globally. It helps centralize common API logic and avoids writing the same code in every API call."
       },
       {
-        question: "12. What is an Axios interceptor and why was it used?",
-        answer: "Axios interceptors allow us to handle requests and responses globally. We used them to attach JWT tokens, manage authorization headers, and handle errors such as 401 unauthorized responses in one place."
+        question: "11. What is routing? How do you handle it in your project?",
+        group: "Data, Auth & Routing",
+        answer: "In my project, we use react-router-dom for client-side routing. We configure BrowserRouter at the application root, and all routes are defined centrally in a routes folder using the useRoutes hook. After a user logs in successfully, they are redirected to the Dashboard, from where they can navigate to different services like Virtual Machines, Storage, Networking, and Backup. For resource-specific pages, such as a Virtual Machine, we use dynamic routes (for example, /vm/:id) and nested routes to display tabs like Overview, Disks, Snapshots, and Backup under the same page. We also wrap the application with Suspense for lazy-loaded components and an ErrorBoundary to handle runtime errors gracefully. For security, we maintain an `AccessControl.js` file that implements role-based access control. It checks the logged-in user's role, such as Super Admin, Admin, Tenant Owner, or Tenant Admin, before allowing access to routes, menus, and actions, ensuring users can only access the modules they are authorized to use.\n\nRouting is the process of mapping URLs to different components or pages in a Single Page Application (SPA). In React, we commonly use react-router-dom, which enables navigation between pages without refreshing the browser. It supports features such as protected routes, nested routes, dynamic route parameters, lazy loading, and browser history management, providing a smooth user experience."
       },
       {
-        question: "13. What is routing and how was it handled?",
-        answer: "Routing maps URLs to components or pages. In the project, we used react-router-dom to define routes, nested routes, dynamic routes, and protected routes for different modules and user roles."
+        question: "12. What is an Error Boundary? How does it work?",
+        group: "Data, Auth & Routing",
+        answer: "In my project, we use an Error Boundary to handle unexpected runtime errors in React components. For example, if the VM Overview page crashes due to a JavaScript error while rendering, without an Error Boundary the user would see a broken application or a blank screen. To avoid this, we wrap important modules with an Error Boundary. If an error occurs, only that module displays a fallback UI with a message like 'Something went wrong' and a 'Go Home' button to navigate back to the Dashboard, while the rest of the application continues to work normally. We also use componentDidCatch to log the error for debugging.\n\nAn Error Boundary is a React class component that catches JavaScript runtime errors in its child components during rendering, lifecycle methods, and constructors. It uses getDerivedStateFromError() to update the UI and display a fallback screen, and componentDidCatch() to log error details. Instead of crashing the entire application, it isolates the failure to the affected component, improving application stability and user experience."
       },
       {
-        question: "14. What is an Error Boundary and how does it work?",
-        answer: "An Error Boundary catches runtime errors in child components and shows a fallback UI instead of crashing the whole app. It improves stability and keeps the rest of the application usable."
+        question: "13. What is lazy loading? Where did you use it in your project?",
+        group: "Optimization & Delivery",
+        answer: "In our project, lazy loading is not implemented. We have multiple modules such as Virtual Machines, Reports, Admin, GPU, Scheduler, Recycle Bin, and Monitoring, and all of these modules are imported statically in the `routes/index.js` file. As a result, when the application starts, all the modules are bundled and loaded together instead of loading only the module the user is accessing. We do use Suspense in the `Hyperscaler-VirtualMachine.js` file, but it is only used to display a loading fallback and is not used together with React.lazy(). So, in the current implementation, all modules are loaded during startup, and lazy loading is not being used. If we implement React.lazy() in the future, each module will be loaded only when the user navigates to it, reducing the initial bundle size and improving startup performance.\n\nLazy loading is a React performance optimization technique where components or modules are loaded only when they are needed instead of loading everything during application startup. It is implemented using React.lazy() together with Suspense. This reduces the initial bundle size, improves the first page load time, and enhances the overall performance of large applications."
       },
       {
-        question: "15. What is lazy loading and where was it used?",
-        answer: "Lazy loading loads components only when needed, reducing the initial bundle size. In the current project, it was not fully implemented for all internal modules, but Suspense was used for loading states."
+        question: "14. What is code splitting? Did you use it in your project?",
+        group: "Optimization & Delivery",
+        answer: "Our main application is Swaraj, which follows a single-spa micro-frontend architecture. VirtualMachine is one of the micro-frontend applications inside Swaraj. When the user navigates to the VirtualMachine service from the Swaraj dashboard, only the VirtualMachine micro-frontend is loaded, so at the application level, lazy loading is already happening. However, inside the VirtualMachine micro-frontend, modules such as VM, Reports, Admin, GPU, Scheduler, Recycle Bin, and Monitoring are imported statically in the `routes/index.js` file. Because of this, once the VirtualMachine micro-frontend is loaded, all its internal modules are downloaded together. If we use React.lazy() for these routes, Webpack will create separate chunks for each module, and they will load only when the user navigates to them, reducing the initial bundle size and improving performance.\n\nCode splitting is a performance optimization technique that breaks a large JavaScript bundle into smaller chunks. In React, it is commonly implemented using React.lazy() and Suspense, where Webpack automatically creates separate bundles for lazy-loaded components. These bundles are downloaded only when required, reducing the initial load time and improving application performance."
       },
       {
-        question: "16. What is code splitting and did you use it?",
-        answer: "Code splitting splits the JavaScript bundle into smaller chunks so that only required parts are loaded. It can be achieved using React.lazy and Suspense, which can improve initial load performance."
+        question: "15. What is Material UI theme? How do you maintain a consistent UI?",
+        group: "Optimization & Delivery",
+        answer: "In my project, we use Material UI (MUI) to build a consistent and responsive user interface. We support both Light and Dark themes. To maintain consistency, we have a centralized themes folder that contains `palette.js` for colors, `typography.js` for fonts, and an overrides folder for customizing the default styles of MUI components. All these configurations are combined in a ThemeCustomization component, which creates the theme using MUI's createTheme() and wraps the entire application with ThemeProvider. The current theme mode is read from localStorage, so when the user switches between Light and Dark mode, the entire application updates automatically. Since all components use the centralized theme instead of hardcoded colors or styles, any design change only needs to be made in one place, ensuring a consistent look and feel across the application.\n\nMaterial UI (MUI) is a React component library that provides pre-built, reusable UI components such as Buttons, Tables, Dialogs, Forms, and Cards based on Google's Material Design guidelines. It also provides a powerful theming system using ThemeProvider and createTheme(), allowing developers to centralize colors, typography, spacing, and component styling. This ensures UI consistency, improves maintainability, and makes it easy to support Light and Dark themes throughout the application."
       },
       {
-        question: "17. What is Material UI and how was theme consistency maintained?",
-        answer: "Material UI is a React component library based on Google's design system. We used a central theme configuration for colors, typography, and component styles so the UI remained consistent across the application."
+        question: "16. What is internationalization? Explain it in more detail.",
+        group: "Optimization & Delivery",
+        answer: "In our project, we use i18next and react-i18next for internationalization. We have a translations folder that contains language files such as `en.json`, `fr.json`, and `hi.json`, and throughout the application we use the t() function instead of hardcoding user-facing text. This makes the application ready to support multiple languages. However, in the current implementation, the language resources are not registered in the `i18n.js` configuration, so language switching is not active. If the resources are enabled, i18next will load the selected language file and update all UI text dynamically without changing the application logic.\n\nInternationalization (i18n) is the process of designing an application to support multiple languages and regions. In React, it is commonly implemented using i18next and react-i18next. All user-facing text is stored in language-specific JSON files, such as `en.json`, `fr.json`, and `hi.json`. When the user changes the language, i18next loads the corresponding translation file and updates the UI dynamically, making the application easier to maintain and extend for global users."
       },
       {
-        question: "18. What is internationalization?",
-        answer: "Internationalization means preparing an application to support multiple languages. We used i18next and react-i18next concepts for translation support, keeping user-facing text in language files instead of hardcoding it."
+        question: "17. What performance optimization techniques were used in your project?",
+        group: "Optimization & Delivery",
+        answer: "In my project, we focused on improving performance in multiple ways. We used useMemo to cache expensive calculations and avoid unnecessary recomputations. We implemented pagination in our reusable table component so that only a limited number of records are displayed at a time, improving rendering performance for large datasets. We also used React.memo and useCallback in a few components where preventing unnecessary re-renders was beneficial. Since our application follows a single-spa micro-frontend architecture, the Swaraj shell loads the VirtualMachine micro-frontend only when the user navigates to it, which improves the initial application load time. However, inside the VirtualMachine micro-frontend, route-level lazy loading and code splitting are not implemented because the modules are statically imported. We also optimized performance by avoiding unnecessary re-renders and duplicate API calls wherever possible.\n\nPerformance optimization is the process of improving an application's speed, responsiveness, and resource usage. In React, common techniques include React.memo to prevent unnecessary component re-renders, useMemo to cache expensive computations, useCallback to memoize functions, lazy loading and code splitting to reduce the initial bundle size, pagination and virtualization for handling large datasets, and debouncing to reduce unnecessary API calls. The appropriate technique depends on the application's requirements."
       },
       {
-        question: "19. What performance optimization techniques were used?",
-        answer: "We used useMemo for expensive calculations, useCallback to avoid unnecessary function recreation, pagination for large tables, and React.memo in a few components to reduce re-renders. The micro frontend shell also helped load only the required app area."
+        question: "18. What is testing? What testing have you done in your project?",
+        group: "Optimization & Delivery",
+        answer: "In my project, we used Jest and React Testing Library for unit testing. The testing environment was configured using `jest.config.js`, which included the jsdom environment, Babel transformation, module aliases, and mocks for CSS and static assets. We wrote unit tests for page-level components such as Flavor Listing, Disks Listing, GPU Request, Global Monitoring, HSG Listing, Advisor, and Insight Monitoring. In our test cases, we mocked the API service using jest.mock() so that tests didn't depend on the actual backend. We also wrapped components with a mock Redux store and MemoryRouter to simulate the application environment, and mocked reusable child components like ReusableTable and CustomButton so the tests focused only on the component being tested. We verified component rendering, data binding from API responses, user interactions like clicking the Refresh button, and edge cases such as displaying '0 of 0' when no data is returned.\n\nTesting is the process of verifying that an application behaves as expected. In React, Jest is commonly used as the test runner, while React Testing Library is used to test components from the user's perspective. Unit testing focuses on individual components or functions by mocking external dependencies such as APIs. Typical test cases include verifying component rendering, user interactions, data binding, conditional rendering, and edge cases. This helps identify issues early and ensures application reliability."
       },
       {
-        question: "20. What is testing and what testing was done?",
-        answer: "Testing verifies that the application works as expected. In the project, we used Jest and React Testing Library for unit testing components, mocking APIs, testing user interactions, and verifying rendering behavior."
-      },
-      {
-        question: "21. What is DevOps and what deployment process was used?",
-        answer: "DevOps automates build, test, and deployment workflows. In our project, code was pushed to feature branches, reviewed through Merge Requests, and then built through a CI/CD pipeline into Docker images for deployment."
-      },
-      {
-        question: "22. What are arrow functions and where were they used?",
-        answer: "Arrow functions provide shorter syntax and automatically inherit this from the surrounding scope. They were used for React components, event handlers, and callbacks in our project."
-      },
-      {
-        question: "23. What are template literals?",
-        answer: "Template literals use backticks and ${} to create dynamic strings. They are cleaner than string concatenation and were used in API URL construction and dynamic messages."
-      },
-      {
-        question: "24. What is destructuring assignment?",
-        answer: "Destructuring assigns values from objects or arrays into variables in a concise syntax. It was used widely for props, API responses, Redux state, and hook values."
-      },
-      {
-        question: "25. What are spread and rest operators?",
-        answer: "The spread operator copies or merges arrays and objects, while the rest operator collects remaining values. They were used for immutable state updates and passing arguments."
-      },
-      {
-        question: "26. What is optional chaining and why was it used?",
-        answer: "Optional chaining safely reads nested properties even when a value is null or undefined. It was used in API error handling to avoid runtime errors when response data was missing."
-      },
-      {
-        question: "27. What is nullish coalescing?",
-        answer: "Nullish coalescing uses ?? to provide a default value only when the left side is null or undefined. It is helpful when preserving valid values like 0 or false."
-      },
-      {
-        question: "28. What are array methods used in the project?",
-        answer: "Common array methods such as map, filter, find, reduce, sort, some, every, slice, and forEach were used for rendering lists, filtering records, and computing totals."
-      },
-      {
-        question: "29. What are Promises, async, and await?",
-        answer: "Promises represent asynchronous tasks. async makes a function return a Promise, and await pauses until the Promise resolves. They were used for API calls and backend data handling."
-      },
-      {
-        question: "30. What is try-catch and why was it used?",
-        answer: "try-catch handles runtime errors gracefully. It was used around async API calls to prevent the app from breaking when a request failed."
-      },
-      {
-        question: "31. What is a closure and why is it important?",
-        answer: "A closure is a function that remembers variables from its outer scope even after that outer function finishes. It is useful in callbacks, comparator functions, and reusable utility logic."
-      },
-      {
-        question: "32. What is the Event Loop?",
-        answer: "The Event Loop manages asynchronous execution in JavaScript. It keeps the UI responsive while waiting for tasks like API responses and timers to complete."
-      },
-      {
-        question: "33. What is debouncing and throttling?",
-        answer: "Debouncing delays repeated events until the user stops typing, while throttling limits how often a function runs over time. Both help reduce unnecessary API calls and improve performance."
-      },
-      {
-        question: "34. What are setTimeout and setInterval?",
-        answer: "setTimeout runs a function once after a delay, and setInterval repeats it at fixed intervals. They were used for auto-refresh, notifications, and periodic updates."
-      },
-      {
-        question: "35. What is event handling and where was it used?",
-        answer: "Event handling responds to user actions such as clicks, input changes, blur, focus, and form submissions. It was used in forms, buttons, search boxes, and dialogs."
-      },
-      {
-        question: "36. What are DOM elements and how were they used?",
-        answer: "DOM elements are the HTML nodes rendered in the browser. In the project, they were used for dynamic file download, favicon updates, canvas conversions, and script loading."
-      },
-      {
-        question: "37. What are ES6 modules and why were they used?",
-        answer: "ES6 modules allow code to be divided into separate files and imported/exported cleanly. They were used heavily for components, utilities, services, Redux files, and constants."
-      },
-      {
-        question: "38. What are default export and named export?",
-        answer: "Default export is used for one main value per file, while named export is used for multiple values. We used both based on the component or utility structure."
-      },
-      {
-        question: "39. What is a Higher-Order Function?",
-        answer: "A Higher-Order Function accepts another function as an argument or returns a function. Array methods and React.memo are common examples used in React applications."
-      },
-      {
-        question: "40. What is a first-class function?",
-        answer: "In JavaScript, functions are first-class values, which means they can be stored in variables, passed around, and returned from other functions. This is fundamental to React callbacks and utility logic."
-      },
-      {
-        question: "41. What is lexical scope?",
-        answer: "Lexical scope means a function can access variables based on where it is defined. It supports closures and helps React event handlers and callbacks use the correct values."
-      },
-      {
-        question: "42. What is JSON and how was it used?",
-        answer: "JSON is a lightweight data format used for exchanging information between frontend and backend. It was used for API requests, responses, and storing data in local storage."
-      },
-      {
-        question: "43. What is data fetching and how was it used?",
-        answer: "Data fetching retrieves backend data for the UI. We used Axios inside useEffect or Redux thunk to fetch VM lists, dashboard data, and other application information."
-      },
-      {
-        question: "44. What is this keyword and was it used?",
-        answer: "this refers to the current execution context of a function. In this project it was used mainly in class-based components such as ErrorBoundary and static methods, while functional components mostly used hooks instead."
-      },
-      {
-        question: "45. What are call, apply, and bind?",
-        answer: "These methods explicitly change the value of this. They were not heavily used in this React project because functional components and arrow functions handled the need naturally."
-      },
-      {
-        question: "46. What is hoisting?",
-        answer: "Hoisting moves declarations to the top of their scope during execution. We avoided relying on it by using modern JavaScript practices and declaring variables before use."
-      },
-      {
-        question: "47. What is garbage collection?",
-        answer: "Garbage collection automatically frees memory that is no longer in use. We helped it by cleaning up timers and subscriptions during component unmount."
-      },
-      {
-        question: "48. What are shallow copy and deep copy?",
-        answer: "A shallow copy duplicates only the top level of an object, while a deep copy duplicates nested objects too. In the project, shallow copies using the spread operator were usually sufficient for React state updates."
-      },
-      {
-        question: "49. What are short-circuit operators?",
-        answer: "Short-circuit operators such as &&, ||, and ?? are used for conditional logic and fallback values. They helped simplify rendering and defaulting logic in the UI."
-      },
-      {
-        question: "50. What is the ternary operator?",
-        answer: "The ternary operator is shorthand for simple if-else logic. It was used in JSX for conditional rendering and dynamic styles."
+        question: "19. What is DevOps? Explain the deployment pipeline you understand.",
+        group: "Optimization & Delivery",
+        answer: "In my project, we follow a GitLab-based CI/CD process. After completing my development, I push my code to a feature branch and create a Merge Request (MR) to the development branch. My Team Lead reviews the code, and once it's approved, the MR is merged. This automatically triggers the GitLab CI pipeline. The pipeline builds a Docker image based on the target branch. For the development branch, it uses the standard Dockerfile, which installs the dependencies and runs the application in a development container. For release and QA branches, it uses `Dockerfile.prod`, which performs a multi-stage build. In the first stage, it installs the dependencies and creates an optimized production build using Webpack. In the second stage, it copies the generated build into an Nginx container along with the `nginx.conf` file, which serves the React application. Finally, the Docker image is tagged and pushed to our internal container registry. The actual deployment to the target environment is handled by a separate deployment process outside this repository.\n\nDevOps is a practice that automates the process of building, testing, packaging, and deploying software. A CI/CD pipeline automatically executes these steps whenever code changes are merged. Typically, the pipeline checks out the code, installs dependencies, runs tests if configured, builds the application, creates a Docker image, pushes it to a container registry, and then deploys it to the target environment. This automation ensures faster, more reliable, and consistent software releases."
       }
     ];
 
-    // simple keyword-based classification into JS vs React
+    const jsQuestions = [
+      {
+        question: "1. What are arrow functions? Where have you used them in your project?",
+        group: "Core Syntax & Data Handling",
+        answer: "In my project, we use arrow functions throughout the application. Since our application is built using React functional components, most components are defined as arrow functions. We also use them for event handlers, callback functions, array methods such as map(), filter(), and find(), and in React hooks like useEffect and useMemo. We prefer arrow functions because they have a shorter and cleaner syntax, automatically inherit the this context from the surrounding scope, and improve code readability and maintainability.\n\nAn arrow function is a shorter way of writing a JavaScript function, introduced in ES6. It uses the => syntax and automatically inherits the this value from its surrounding scope, unlike regular functions which have their own this. Arrow functions are commonly used for callbacks, event handlers, array methods, promises, and React functional components because they make the code more concise and easier to read."
+      },
+      {
+        question: "2. What is a template literal?",
+        group: "Core Syntax & Data Handling",
+        answer: "We use template literals whenever we need to create dynamic strings. For example, while constructing REST API URLs with IDs or query parameters, displaying dynamic messages, creating breadcrumb titles, and building CSS class names. Instead of using string concatenation with the + operator, we use template literals because they make the code cleaner and more readable.\n\nconst apiUrl = `/api/v1/vm/${vmId}`;\nconst message = `VM ${vmName} created successfully`;\nconst title = `${tenantName} - Virtual Machines`;\n\nA template literal is an ES6 feature used to create strings using backticks (`) instead of single or double quotes. It allows us to embed variables and expressions directly inside the string using ${}. It also supports multi-line strings without using special characters like \\n. Template literals make the code more readable and easier to maintain compared to traditional string concatenation."
+      },
+      {
+        question: "3. What is destructuring assignment?",
+        group: "Core Syntax & Data Handling",
+        answer: "We use destructuring assignment throughout the React application to extract values from objects and arrays. For example, we destructure props, API responses, Redux state, React hooks like useState, and configuration objects. This makes the code cleaner, avoids repeatedly accessing object properties, and improves readability.\n\nDestructuring assignment is an ES6 feature that allows us to extract values from objects or arrays and assign them to variables in a single statement. It makes the code shorter, cleaner, and easier to read by avoiding repeated object property access or array indexing."
+      },
+      {
+        question: "4. What is the spread and rest operator?",
+        group: "Core Syntax & Data Handling",
+        answer: "I mainly used the spread operator while updating React state without mutating the existing data. For example, when updating form data or an object in state, instead of modifying the original object, I created a new copy using the spread operator and updated only the required field. I also used it to merge objects, copy arrays, and pass props between components. For the rest operator, I used it to collect the remaining properties from objects and to handle function parameters when the number of arguments was unknown.\n\nThe spread operator (...) is an ES6 feature used to expand or copy the elements of an array or the properties of an object. It is commonly used to copy arrays or objects, merge multiple arrays or objects, update React state immutably, and pass props to components.\n\nThe rest operator (...) is also an ES6 feature, but it collects multiple values into a single array or object. It is commonly used in function parameters to accept a variable number of arguments and in object destructuring to collect the remaining properties."
+      },
+      {
+        question: "5. What is optional chaining and why did you use it in your project?",
+        group: "Core Syntax & Data Handling",
+        answer: "I used optional chaining (?.) in our Axios error interceptor because not every error has the same structure. For example, if the request fails due to a network issue or timeout, Axios doesn't receive a response from the server, so error.response is undefined. Similarly, even if a response exists, the payload may not contain data.error_code. Using optional chaining, like error?.response?.data?.error_code, safely accesses these nested properties without throwing a runtime error. Instead of crashing with 'Cannot read properties of undefined', the code simply returns undefined and allows the interceptor to handle the error gracefully. This makes the application more robust and prevents unexpected failures.\n\nOptional chaining (?.) is a JavaScript feature that safely accesses nested object properties, array elements, or methods without throwing an error if a value is null or undefined. Instead of causing a runtime error, it returns undefined. It makes the code cleaner, reduces multiple null checks, and is commonly used while handling API responses or optional data in React applications."
+      },
+      {
+        question: "6. What is nullish coalescing?",
+        group: "Core Syntax & Data Handling",
+        answer: "I use the Nullish Coalescing operator (??) when I want to provide a default value only for missing data (null or undefined), while preserving valid values like 0, false, or an empty string. This is especially useful when handling API responses in React applications.\n\n?? → Returns the right-hand value only if the left-hand value is null or undefined.\n|| → Returns the right-hand value if the left-hand value is any falsy value (0, \"\", false, null, undefined, NaN)."
+      },
+      {
+        question: "7. What are the array methods used in your project?",
+        group: "Core Syntax & Data Handling",
+        answer: "In my React project, I frequently used JavaScript array methods. map() was used to render tables, cards, and menus. filter() was used for search and filtering records. find() helped retrieve a specific object by ID. some() and every() were used for validations. reduce() was used to calculate totals for reports, dashboard cards, and charts. sort() was used to implement sortable tables. I also used includes() for selection logic, slice() for pagination, forEach() for iterating over data without returning a new array, and concat() or the spread operator to merge arrays. These methods helped keep the code clean, readable, and efficient."
+      },
+      {
+        question: "8. What are Promises, async, and await? Why did you use them in your project?",
+        group: "Async, Timing & Data Fetching",
+        answer: "In my project, I used Promises with async and await to handle asynchronous operations such as loading the VM list, creating, updating, and deleting Virtual Machines through API calls. A Promise is a JavaScript object that represents the eventual result of an asynchronous operation. It has three states:\nPending – the operation is in progress.\nFulfilled – the operation completed successfully.\nRejected – the operation failed.\n\nSince Axios (or our RequestService) HTTP requests communicate with the backend over the network, they return Promises because the response is not available immediately. To make the code easier to read and maintain, I used async and await instead of chaining multiple .then() calls. The execution waits for the API response, then processes the result, updates the React state, and handles any errors using try...catch.\n\nPromise: An object that represents the eventual completion or failure of an asynchronous operation.\nasync: Declares a function as asynchronous. An async function always returns a Promise.\nawait: Pauses the execution of an async function until the Promise is resolved or rejected, making asynchronous code look like synchronous code."
+      },
+      {
+        question: "9. What is try...catch and why did you use it in your project?",
+        group: "Async, Timing & Data Fetching",
+        answer: "In my React project, I used try...catch in almost every asynchronous API call to handle errors gracefully. The try block contains the code that may throw an error, such as an Axios or RequestService API call. If any statement inside the try block throws an exception—including a rejected Promise from an await API call—JavaScript immediately stops executing the remaining code in the try block and jumps to the catch(error) block instead of crashing the application. For example, in VirtualMachine.jsx, methods like getVmList() wrap the await RequestService.httpGETRequest(...) call inside a try...catch.\n\ntry...catch is a JavaScript error-handling mechanism used to catch and handle exceptions that occur while executing code.\ntry → Contains the code that may throw an error.\ncatch → Executes only if an error occurs in the try block.\nfinally (optional) → Always executes, whether an error occurs or not. It's commonly used for cleanup tasks like hiding a loading spinner."
+      },
+      {
+        question: "10. What is a closure and why is it important in your project?",
+        group: "Functions, Scope & Advanced Concepts",
+        answer: "In my React project, I used closures in comparator factory functions, event handlers, utility functions, and setTimeout callbacks. A closure is a function that remembers and has access to the variables of its outer function even after the outer function has finished executing. One example from my project is the getComparator() function in ReusableTable.js.\n\nA closure is a JavaScript feature where an inner function remembers and can access variables from its outer function even after the outer function has finished executing. In my project, I used closures in reusable utility functions like getComparator() for table sorting. The function returns a comparator that remembers the order and property values through a closure, so when sort() calls it later, those values are still available without passing them again. I also used closures in event handlers and setTimeout callbacks. Closures help make the code reusable, clean, and maintainable."
+      },
+      {
+        question: "11. What is the Event Loop?",
+        group: "Async, Timing & Data Fetching",
+        answer: "The Event Loop is a JavaScript mechanism that enables asynchronous operations while keeping the application responsive. Since JavaScript is single-threaded, an API call like await RequestService.httpGETRequest() cannot block the Call Stack. Instead, it sends the request and returns a pending Promise. While waiting, the Call Stack is free, so the UI remains responsive. Once the backend responds, the Promise continuation is placed in the Microtask Queue. The Event Loop waits until the Call Stack is empty, then resumes execution after the await. In my project, this happened behind the scenes for all API operations such as loading the VM list, creating, updating, deleting VMs, and fetching GPU details and tags. I didn't call the Event Loop directly—it is part of the JavaScript runtime that makes async/await work.\n\nThe Event Loop is a JavaScript runtime mechanism that coordinates the Call Stack, Browser APIs, and Task/Microtask Queues to execute asynchronous code without blocking the main thread."
+      },
+      {
+        question: "12. What is debouncing?",
+        group: "Async, Timing & Data Fetching",
+        answer: "Debouncing is a technique that delays the execution of a function until the user stops triggering an event for a specified time, such as 500 milliseconds. In my project, it is useful for VM search functionality. Without debouncing, every keystroke like 'a', 'ab', 'abc', 'abcd', and 'abcde' would trigger separate API calls. With a 500 ms debounce, the API is called only once after the user finishes typing. This reduces unnecessary network requests, improves application performance, reduces server load, and provides a better user experience.\n\nDebouncing is a JavaScript optimization technique that delays a function's execution until a specified delay has passed since the last event.\nIt is commonly used for: Search boxes, Auto-complete, Filtering, Window resize events, Scroll events."
+      },
+      {
+        question: "13. What is throttling and why is it used?",
+        group: "Async, Timing & Data Fetching",
+        answer: "Throttling is a technique that limits how often a function can execute within a specified time interval. Unlike debouncing, which waits until the user stops an action, throttling allows the function to execute at regular intervals, even if the event keeps firing continuously. In applications like a VM Monitoring Dashboard, throttling is useful for handling high-frequency events such as:\nWindow resize, Scrolling, Mouse movement, Live monitoring charts.\n\nFor example, if a monitoring dashboard updates chart data while the user is continuously resizing the browser window, without throttling the resize handler may execute hundreds of times per second. Using throttling with a 500 ms interval ensures the function executes at most once every 500 ms, reducing unnecessary calculations and improving performance.\n\nThrottling is a JavaScript optimization technique that ensures a function executes at most once within a specified time interval, even if the triggering event occurs many times."
+      },
+      {
+        question: "14. What is setTimeout() and setInterval()? Why is it used?",
+        group: "Async, Timing & Data Fetching",
+        answer: "setTimeout() and setInterval() are JavaScript timer functions. setTimeout() executes a function once after a specified delay, while setInterval() executes a function repeatedly at fixed intervals until it is cleared. In my React project, I used setTimeout() to automatically dismiss success and error notifications after 10 seconds. I used setInterval() for auto-refresh functionality, such as refreshing the Queue Status every 10 seconds and updating the Monitoring Dashboard with the latest data. I also used clearInterval() during component cleanup to prevent memory leaks and unnecessary background execution.\n\nsetTimeout() schedules a function to execute once after a specified delay.\nsetInterval() schedules a function to execute repeatedly at a fixed interval until clearInterval() is called."
+      },
+      {
+        question: "15. What is Event Handling and where did you use it in your project?",
+        group: "Functions, Scope & Advanced Concepts",
+        answer: "Event handling is the process of responding to user interactions in an application. In React, we use event handlers such as onClick, onChange, onBlur, onFocus, and onSubmit. In my project, I used onClick for actions like Create, Edit, Delete, Refresh, and opening dialogs. I used onChange to update form fields and search inputs, onBlur for field validation, onFocus to provide input focus behavior or helper text, and onSubmit to submit forms such as Create VM and Update VM. Event handling makes the application interactive by responding to user actions and updating the UI accordingly.\n\nEvent Handling is a mechanism that allows JavaScript or React to execute a function when a specific event occurs."
+      },
+      {
+        question: "16. What are DOM elements? How did you use them in your project?",
+        group: "Functions, Scope & Advanced Concepts",
+        answer: "DOM (Document Object Model) elements are the actual HTML elements (nodes) created by the browser, such as <div>, <button>, <input>, and <table>. In my React project, I rarely accessed DOM elements directly because React manages the DOM through the Virtual DOM and updates it efficiently using JSX. However, I used direct DOM manipulation in scenarios where React doesn't provide a built-in solution.\n\nSome examples from my project are:\nFavicon update: Used document.querySelector() and document.createElement(\"link\") to dynamically change the browser favicon.\nFile download: Used document.createElement(\"a\") and triggered .click() programmatically to download PDF files.\nImage conversion: Used document.createElement(\"canvas\") to convert the application logo into a Base64 image.\nDynamic script loading: Used document.createElement(\"script\") to load external JavaScript files dynamically.\nuseRef: Used to hold references to DOM elements, such as containerRef in ReusableTable, for operations that require direct access to the rendered element.\n\nThese are cases where direct DOM manipulation is necessary, while the rest of the UI is managed by React.\n\nThe DOM (Document Object Model) is a tree-like representation of an HTML document. Every HTML tag becomes a DOM element (node) that JavaScript can access and manipulate."
+      },
+      {
+        question: "17. What are ES6 Modules and why did you use them in your project?",
+        group: "Functions, Scope & Advanced Concepts",
+        answer: "ES6 Modules are JavaScript's standard module system for splitting code into separate files and sharing functionality using export and import. Instead of keeping everything in one global scope, each file becomes its own module. In my React project, every component, utility, API service, Redux file, and constants file is an ES6 module. For example, I exported the getLogoDataUrl utility from one file and imported it wherever it was needed. I also imported components like ReusableTable, services like RequestService, and API constants. Using ES6 Modules made the code modular, reusable, and easier to maintain, which is the standard structure followed in modern React applications.\n\nES6 Modules are a JavaScript feature introduced in ECMAScript 2015 (ES6) that allows developers to split code into separate files and share functionality using export and import, instead of keeping everything in one global scope."
+      },
+      {
+        question: "18. What are Default Export and Named Export? How did you use them in your project?",
+        group: "Functions, Scope & Advanced Concepts",
+        answer: "JavaScript provides two types of exports: Default Export and Named Export. A Default Export is used when a file exports one main component or function, and only one default export is allowed per file. It is imported without curly braces, and the import name can be anything. A Named Export is used when a file exports multiple functions, constants, or utilities. Named exports are imported using curly braces and the exported names must match, unless they are aliased. In my React project, I used default exports for React components like VirtualMachine and named exports for utility functions, constants, and helper methods such as getLogoDataUrl. This made the code modular, reusable, and easy to maintain."
+      },
+      {
+        question: "19. What is a Higher-Order Function (HOF) and why did you use it in your project?",
+        group: "Functions, Scope & Advanced Concepts",
+        answer: "A Higher-Order Function is a function that either accepts another function as an argument or returns another function. In my React project, I used Higher-Order Functions in three ways. First, I used array methods like map, filter, find, reduce, sort, some, and every, which take callback functions and helped me render tables, implement search, calculate totals, and validate data without writing manual loops. Second, I used React.memo(CreateVm), which is a Higher-Order Function because it takes a component and returns an optimized version that skips unnecessary re-renders when props don't change. Third, I used a comparator factory, getComparator(order, property), which returns a comparator function for sort(). These Higher-Order Functions made the code cleaner, more reusable, and improved performance."
+      },
+      {
+        question: "20. What is a first-class function?",
+        group: "Functions, Scope & Advanced Concepts",
+        answer: "A First-Class Function means JavaScript treats functions like any other value. We can store them in variables, pass them as arguments, return them from other functions, and assign them to objects. In my React project, I used first-class functions in event handlers like onClick, callback functions for map(), filter(), and sort(), and in React.memo(), which accepts a component function and returns an optimized component. I also used them in getComparator(), which returns a comparator function for sorting. First-class functions are the foundation for callbacks, closures, and higher-order functions in JavaScript."
+      },
+      {
+        question: "21. What is Lexical Scope and why did you use it in your project?",
+        group: "Functions, Scope & Advanced Concepts",
+        answer: "Lexical scope is a JavaScript rule that determines which variables a function can access based on where it is defined in the source code, not where it is called. It isn't something we explicitly implement—it's how JavaScript resolves variables automatically. In my React project, lexical scope was used everywhere. For example, the getComparator() function returns another function that can still access order and property because it is defined inside the outer function. Similarly, event handlers, useEffect callbacks, and functions defined inside React components can directly access component state and props because of lexical scope. It is the underlying mechanism that makes closures and React callbacks work correctly.\n\nLexical Scope means that JavaScript determines which variables a function can access based on where the function is defined in the code."
+      },
+      {
+        question: "22. What is JSON and how did you use it in your project?",
+        group: "Functions, Scope & Advanced Concepts",
+        answer: "JSON stands for JavaScript Object Notation. It is a lightweight, text-based format used to exchange data between the frontend and backend. In my React project, all API requests and responses used JSON. Axios automatically serialized JavaScript objects into JSON for requests and parsed JSON responses into JavaScript objects. I also used JSON.stringify() and JSON.parse() while storing and retrieving objects from localStorage, since storage only supports strings. Additionally, I used JSON.parse() after decrypting encrypted API payloads and after Base64 decoding project data. JSON is the standard format for API communication and for serializing objects that need to be stored as strings.\n\nJSON (JavaScript Object Notation) is a lightweight, text-based data format used to exchange information between systems."
+      },
+      {
+        question: "23. What is Data Fetching and how did you use it in your project?",
+        group: "Async, Timing & Data Fetching",
+        answer: "Data fetching is the process of retrieving data from a backend server or REST API. In my React project, I used Axios through our RequestService with async/await to fetch data such as the VM list, GPU details, tags, queue status, and monitoring dashboard data. Typically, I triggered the API call inside useEffect() when the component mounted or when dependencies changed. The backend returned data in JSON format, Axios converted it into a JavaScript object, and I stored it in React state using useState or Redux. Once the state was updated, React automatically re-rendered the UI. This is different from reading data from localStorage, which is already available on the client and does not require an API call.\n\nData Fetching means requesting data from a backend server or API so that it can be displayed or processed in the application."
+      },
+      {
+        question: "24. Have you used the this keyword in your project? What is its use?",
+        group: "Functions, Scope & Advanced Concepts",
+        answer: "Yes, but only in a few places. Our project is built mainly with React Functional Components and Hooks, so we rarely use this. One place is RequestService, where static methods use this to call other static methods, such as this.formatURLWithNode(). Another place is ErrorBoundary, which is implemented as a React Class Component because React Error Boundaries require class components. There, this refers to the component instance and is used with this.state, this.props, and this.setState(). Apart from these cases, the rest of the project uses functional components and Hooks, so this isn't needed.\n\nThe this keyword refers to the object that is currently executing the function. Its value depends on how the function is called."
+      },
+      {
+        question: "25. What are call(), apply(), and bind()? Did you use them in your project?",
+        group: "Functions, Scope & Advanced Concepts",
+        answer: "In my current React project, I did not use call(), apply(), or bind(). Our application is built using React Functional Components, Hooks, and arrow functions, so there is no need to manually bind this. These methods are mainly used in JavaScript and older React Class Components to explicitly control the value of this. call() invokes a function immediately with individual arguments, apply() invokes it immediately with an array of arguments, and bind() returns a new function with this permanently bound. In our project, the only class-based files are ErrorBoundary and RequestService, and neither requires these methods, so they are not used in the codebase.\n\ncall(), apply(), and bind() are JavaScript methods used to explicitly control the value of this."
+      },
+      {
+        question: "26. What is Hoisting? Did you use it in your project?",
+        group: "Functions, Scope & Advanced Concepts",
+        answer: "Hoisting is JavaScript's behavior of moving declarations to the top of their scope before execution. Function declarations are fully hoisted, whereas variables declared with var are hoisted but initialized as undefined. Variables declared with let and const are also hoisted, but they remain in the Temporal Dead Zone until their declaration is reached, so accessing them earlier causes a ReferenceError. In my React project, I didn't rely on hoisting. We followed modern ES6 practices by using const, let, and arrow functions, and we always declared variables and functions before using them, which makes the code cleaner and avoids runtime errors.\n\nHoisting is JavaScript's default behavior of moving declarations to the top of their scope before execution. However, only declarations are hoisted, not initializations."
+      },
+      {
+        question: "27. What is Garbage Collection? Did you use it in your project?",
+        group: "Functions, Scope & Advanced Concepts",
+        answer: "Garbage Collection is JavaScript's automatic memory management mechanism. It frees memory occupied by objects that are no longer reachable, so developers don't manually allocate or release memory. In my project, I didn't use Garbage Collection directly because it's handled by the JavaScript engine. However, I wrote code that helps it work efficiently by cleaning up timers in useEffect. For example, I used clearTimeout() and clearInterval() in components like ReusableTable, QueueStatus, and InsightMonitoringCorrelation. Without these cleanup functions, timer callbacks would continue running and keep references to state and DOM elements, causing memory leaks. By cleaning them up on component unmount, those objects become eligible for garbage collection.\n\nGarbage Collection is JavaScript's automatic process of reclaiming memory used by objects that are no longer reachable."
+      },
+      {
+        question: "28. What are Shallow Copy and Deep Copy? Which one did you use in your project?",
+        group: "Core Syntax & Data Handling",
+        answer: "A shallow copy creates a new object or array by copying only the top-level properties, while nested objects remain shared by reference. A deep copy recursively copies all nested objects and arrays, creating a completely independent copy. In my React project, I mostly used shallow copies with the spread operator and Object.assign() because React only needs a new top-level object reference to detect state changes and re-render the UI. For example, I updated state using { ...prevState, field: value }. Our project didn't require deep copies because we weren't modifying deeply nested objects, so there were no usages of structuredClone() or JSON.parse(JSON.stringify(...))."
+      },
+      {
+        question: "29. What are Short-Circuit Operators? Where did you use them in your project?",
+        group: "Core Syntax & Data Handling",
+        answer: "Short-circuit operators evaluate expressions from left to right and stop as soon as the result is determined. In my React project, I used && mainly for conditional rendering, such as displaying loaders or dialogs only when a condition is true. I used || to provide fallback values, for example rowsPerPage || 10. I used ?? when handling API responses so that default values were applied only when the backend returned null or undefined, while preserving valid values like 0. These operators made the code cleaner, more readable, and reduced the need for unnecessary if statements."
+      },
+      {
+        question: "30. What is the Ternary Operator and why did you use it in your project?",
+        group: "Core Syntax & Data Handling",
+        answer: "The ternary operator (? :) is a shorthand for an if...else statement. It evaluates a condition and returns one value if the condition is true and another if it is false. In my React project, I used it for conditional rendering and dynamic styling. For example, in QueueList.js, I used it to set the background color based on whether the application was in dark mode or light mode. I used the ternary operator because it is an expression, so it can be written directly inside JSX and object literals like sx={{ ... }}, whereas if...else statements cannot. It makes the code cleaner, more concise, and easier to maintain."
+      }
+    ];
+
+    const introListEl = document.getElementById('introList');
     const jsListEl = document.getElementById('jsList');
     const reactListEl = document.getElementById('reactList');
 
-    const reactKeywords = ['React', 'Redux', 'useState', 'useEffect', 'useMemo', 'useCallback', 'useRef', 'Context', 'Single-SPA', 'Material UI', 'i18n', 'Axios', 'Error Boundary', 'Redux Persist'];
+    const groupColors = ['blue', 'orange', 'green', 'purple', 'pink'];
 
-    function createItemEl(item) {
+    function formatInline(text) {
+      return text
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    }
+
+    function createCardEl(item, color) {
       const wrapper = document.createElement('div');
-      wrapper.className = 'faq-item';
+      wrapper.className = 'faq-item card';
+      wrapper.style.setProperty('--card-color', `var(--accent-${color})`);
 
       const button = document.createElement('button');
       button.className = 'faq-question';
       button.type = 'button';
-      button.innerHTML = `<span>${item.question}</span><span class="icon">+</span>`;
+      button.innerHTML = `<span class="dot" style="background:var(--accent-${color})"></span><span class="q-text">${item.question}</span><span class="icon" title="Answers">+</span>`;
 
       const answer = document.createElement('div');
       answer.className = 'faq-answer';
-      answer.innerHTML = `<p>${item.answer}</p>`;
+      answer.innerHTML = item.answer
+        .split('\n\n')
+        .map(p => `<p>${formatInline(p).replace(/\n/g, '<br>')}</p>`)
+        .join('');
 
       button.addEventListener('click', () => wrapper.classList.toggle('active'));
 
@@ -256,11 +341,60 @@
       return wrapper;
     }
 
-    questions.forEach(item => {
-      const text = (item.question + ' ' + item.answer).toLowerCase();
-      const isReact = reactKeywords.some(k => text.includes(k.toLowerCase()));
-      if (isReact) reactListEl.appendChild(createItemEl(item));
-      else jsListEl.appendChild(createItemEl(item));
+    function renderGrouped(containerEl, items) {
+      const groups = [];
+      items.forEach(item => {
+        let group = groups.find(g => g.title === item.group);
+        if (!group) {
+          group = { title: item.group, color: groupColors[groups.length % groupColors.length], items: [] };
+          groups.push(group);
+        }
+        group.items.push(item);
+      });
+
+      groups.forEach(group => {
+        const heading = document.createElement('h3');
+        heading.className = 'group-title';
+        heading.style.color = `var(--accent-${group.color})`;
+        heading.textContent = group.title;
+
+        const grid = document.createElement('div');
+        grid.className = 'card-grid';
+        group.items.forEach(item => grid.appendChild(createCardEl(item, group.color)));
+
+        containerEl.appendChild(heading);
+        containerEl.appendChild(grid);
+      });
+    }
+
+    renderGrouped(introListEl, introQuestions);
+    renderGrouped(jsListEl, jsQuestions);
+    renderGrouped(reactListEl, reactQuestions);
+
+    const tabButtons = document.querySelectorAll('.tab-btn[data-tab]');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+    const placeholderButtons = document.querySelectorAll('.tab-btn.placeholder');
+    const toastEl = document.getElementById('toast');
+    let toastTimer;
+
+    function showToast(message) {
+      toastEl.textContent = message;
+      toastEl.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2200);
+    }
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabButtons.forEach(b => b.classList.remove('active'));
+        tabPanels.forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    placeholderButtons.forEach(btn => {
+      btn.addEventListener('click', () => showToast('Coming soon'));
     });
   </script>
 </body>
